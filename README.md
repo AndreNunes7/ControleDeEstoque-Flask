@@ -35,3 +35,21 @@ Uma aplicação web simples desenvolvida em Flask para gerenciar o estoque de pr
    ```bash
    git clone https://github.com/seuusuario/controle-estoque.git
    cd controle-estoque
+
+
+📋 Como Usar
+Envio do arquivo Excel:
+
+Clique no botão de upload na página inicial.
+Escolha um arquivo .xlsx com os dados do estoque.
+Os dados serão exibidos na tabela.
+Edição dos produtos:
+
+Use os botões + e - para alterar a quantidade.
+O estoque será atualizado automaticamente.
+Exclusão de produtos:
+
+Clique em "Excluir" para remover um produto do estoque.
+Exportação:
+
+Clique no botão "Baixar Estoque Atualizado" para obter uma planilha Excel atualizada.
