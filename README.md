@@ -37,19 +37,20 @@ Uma aplicação web simples desenvolvida em Flask para gerenciar o estoque de pr
    cd controle-estoque
 
 
-📋 Como Usar
-Envio do arquivo Excel:
+## 📋 Como Usar
 
-Clique no botão de upload na página inicial.
-Escolha um arquivo .xlsx com os dados do estoque.
-Os dados serão exibidos na tabela.
-Edição dos produtos:
+### Envio do arquivo Excel:
+- Clique no botão de upload na página inicial.
+- Escolha um arquivo `.xlsx` com os dados do estoque.
+- Os dados serão exibidos na tabela.
 
-Use os botões + e - para alterar a quantidade.
-O estoque será atualizado automaticamente.
-Exclusão de produtos:
+### Edição dos produtos:
+- Use os botões `+` e `-` para alterar a quantidade.
+- O estoque será atualizado automaticamente.
 
-Clique em "Excluir" para remover um produto do estoque.
-Exportação:
+### Exclusão de produtos:
+- Clique em "Excluir" para remover um produto do estoque.
 
-Clique no botão "Baixar Estoque Atualizado" para obter uma planilha Excel atualizada.
+### Exportação:
+- Clique no botão "Baixar Estoque Atualizado" para obter uma planilha Excel atualizada.
+
