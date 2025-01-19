@@ -35,6 +35,20 @@ Uma aplicação web simples desenvolvida em Flask para gerenciar o estoque de pr
    ```bash
    git clone https://github.com/seuusuario/controle-estoque.git
    cd controle-estoque
+2. Crie um ambiente virtual (opcional):
+```bash
+  python -m venv venv
+  source venv/bin/activate   # No Windows: venv\Scripts\activate
+
+```
+3. Instale as dependências:
+```bash
+ pip install -r requirements.txt
+```
+4. Execute a aplicação:
+```bash
+  python app.py
+```
 
 
 ## 📋 Como Usar
