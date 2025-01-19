@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .edit-form input[type="number"] {
+            width: 60px; /* Reduzindo a largura do campo de número */
+            padding: 5px; /* Ajustando o preenchimento interno */
+            font-size: 14px; /* Reduzindo o tamanho da fonte */
+        }
+        .edit-form button[type="submit"] {
+            padding: 5px 10px; /* Ajustando o preenchimento do botão */
+            font-size: 14px; /* Reduzindo o tamanho da fonte do botão */
+        }
+        .quantity {
+            text-align: center; /* Centraliza o texto horizontalmente */
+            vertical-align: middle; /* Centraliza o texto verticalmente */
+        }
+        .quantity-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .quantity-controls button {
+            margin: 0 5px; /* Espaçamento entre os botões */
+        }
+        .empty-row {
+            height: 20px; /* Ajuste a altura da linha vazia conforme necessário */
+        }
+        .first-product {
+            text-align: center;
+            font-size: 18px; /* Ajusta o tamanho da fonte */
+            font-weight: bold; /* Define como negrito */
+            padding: 10px; /* Adiciona espaçamento interno */
+            margin: 10px; /* Adiciona espaçamento externo */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .quantity {
+            vertical-align: middle; /* Centraliza o texto verticalmente */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Controle de Estoque</h1>
+        <h4 style="text-align: center;">Quiosque do Chopp</h4>
+        <form action="{{ url_for('home') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <h2>Estoque Atual</h2>
+        <table>
+            <tr>
+                <td colspan="5" class="first-product">Congelados</td> 
+            </tr>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Contagem</th> 
+                <th>Editar</th>
+                <th>Excluir</th>
+            </tr>
+            {% for item in estoque %}
+                {% if loop.first and item.produto == 'Congelados' %}
+                {% else %}
+                    <tr data-produto="{{ item.produto }}">
+                        <td>{{ item.produto }}</td>
+                        <td class="quantity">{{ item.quantidade }}</td>
+                        <td class="quantity">{{ item.contagem | float|int }}</td> <!-- Aplicando o filtro float|int para exibir apenas números inteiros -->
+                        <td class="edit-form">
+                            <form action="{{ url_for('editar_produto', produto=item.produto) }}" method="post">
+                                <div class="quantity-controls">
+                                    <button type="button" class="decrement" data-produto="{{ item.produto }}">-</button>
+                                    <button type="button" class="increment" data-produto="{{ item.produto }}">+</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td><a href="{{ url_for('excluir_produto', produto=item.produto) }}">Excluir</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+
+        <form action="{{ url_for('download_estoque') }}" method="get">
+            <button type="submit">Baixar Estoque Atualizado</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const decrementButtons = document.querySelectorAll('.decrement');
+            const incrementButtons = document.querySelectorAll('.increment');
+
+            decrementButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const produto = this.getAttribute('data-produto');
+                    const quantityElement = document.querySelector(`tr[data-produto="${produto}"] .quantity`);
+                    let newValue = parseInt(quantityElement.textContent) - 1;
+                    if (newValue >= 0) {
+                        quantityElement.textContent = newValue;
+                        saveChanges(produto, newValue);
+                    }
+                });
+            });
+
+            incrementButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const produto = this.getAttribute('data-produto');
+                    const quantityElement = document.querySelector(`tr[data-produto="${produto}"] .quantity`);
+                    let newValue = parseInt(quantityElement.textContent) + 1;
+                    quantityElement.textContent = newValue;
+                    saveChanges(produto, newValue);
+                });
+            });
+
+            function saveChanges(produto, newValue) {
+                // Simular o envio do formulário via AJAX
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `/editar/${produto}`, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        console.log('Produto atualizado com sucesso');
+                    } else {
+                        console.log('Erro ao atualizar o produto');
+                    }
+                };
+                xhr.send(`quantidade=${newValue}`);
+            }
+        });
+    </script>
+</body>
+</html>
